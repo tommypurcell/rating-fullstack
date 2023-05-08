@@ -12,7 +12,9 @@ app.use(bodyParser.json())
 // Database
 async function connectToDB() {
   try {
-    await mongoose.connect('INSERT MONGODB CONNECTION STRING')
+    await mongoose.connect(
+      'mongodb+srv://airbnbusername:airbnbpassword@airbnb.prh8sp9.mongodb.net/rating'
+    )
     console.log('Connected to MongoDB')
   } catch (err) {
     console.log(err)
@@ -20,8 +22,22 @@ async function connectToDB() {
 }
 
 // Models
+let Ratings = mongoose.model('ratings', {
+  ratingNumber: {
+    type: Number,
+    required: true,
+  },
+})
 
 // Routes
+app.post('/ratings', async (req, res) => {
+  try {
+    let rating = await Ratings.create(req.body)
+    res.send(rating)
+  } catch (err) {
+    res.send(err)
+  }
+})
 
 // Server
 app.listen(4000, () => {
